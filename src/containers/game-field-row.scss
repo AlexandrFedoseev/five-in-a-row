@@ -1,0 +1,17 @@
+.row {
+    white-space: nowrap;
+    font-size: 0;
+    border-bottom: 1px solid #888;
+    width: auto;
+    margin: 0 auto;
+    &:first-child {
+        border-top: 1px solid #888;
+    }
+    &::after {
+        content: '';
+        display: table;
+        clear: both;
+    }
+}
+
+

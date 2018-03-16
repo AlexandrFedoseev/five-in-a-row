@@ -1,0 +1,1 @@
+export type ActionType = 'CELL_CLICK' | 'GET_FIELD' | 'START_LOAD';
