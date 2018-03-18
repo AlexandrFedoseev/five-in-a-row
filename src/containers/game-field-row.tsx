@@ -5,7 +5,6 @@ import { GameFieldCell } from './game-field-cell';
 
 export interface GameFieldRowProps {
     rowData: Immutable.Map<number, GameCell>;
-    key: number
     onCellClick: (cell: GameCell) => void
 }
 
@@ -20,16 +19,19 @@ export class GameFieldRow extends React.Component<GameFieldRowProps, {}> {
         this.props.onCellClick(cell);
     }
 
-    render() {
-        const cellItems: any[] = [];
-        this.props.rowData.forEach((cell, i) => {
-            cellItems.push(
-                <GameFieldCell cellData={cell} key={i} onCellClick={this.onCellClick.bind(this)} />
-            );
-        });
+    public shouldComponentUpdate(nextParams: GameFieldRowProps, nextState: any) {
+        return this.props.rowData !== nextParams.rowData;
+    }
 
+    render() {
         return <div className='row'>
-            { cellItems }
+            <div className='row-wrap'>
+            {
+                this.props.rowData.valueSeq().map((cell, i) => 
+                    <GameFieldCell cellData={cell} key={i} onCellClick={this.onCellClick.bind(this)} />
+                )
+            }
+            </div>
         </div>
     }
 }
