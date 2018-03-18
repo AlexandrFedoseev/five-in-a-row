@@ -15,6 +15,7 @@ class GameFieldStore extends ReduceStore<GameFieldState, Action> {
     public gameField: GameFieldState;
     private userPlays: 1 | 2 = 1;
     private turn = 1;
+    private fieldSize = 15;
 
     private _ai: AI;
 
@@ -23,10 +24,11 @@ class GameFieldStore extends ReduceStore<GameFieldState, Action> {
         this._ai = new AI();
     }
 
-    public getInitialState(): GameFieldState {
+    public getInitialState(size?: number): GameFieldState {
+        size = size == null ? INITIAL_GAME_FIELD_SIZE : size;
         let map: GameFieldState = Immutable.Map();
-        for (let i = 0; i < INITIAL_GAME_FIELD_SIZE; i++) {
-            for (let j = 0; j < INITIAL_GAME_FIELD_SIZE; j++) {
+        for (let i = 0; i < size; i++) {
+            for (let j = 0; j < size; j++) {
                 map = map.setIn([i, j], new GameCell(i, j, 0, null));
             }
         }
@@ -55,6 +57,15 @@ class GameFieldStore extends ReduceStore<GameFieldState, Action> {
                     }
                 }
                 return newState;
+            }
+            case 'RESTART_GAME': {
+                this._ai.init(this.fieldSize);
+                return this.getInitialState(this.fieldSize);
+            }
+            case 'RESIZE_FIELD': {
+                this.fieldSize = action.size;
+                this._ai.init(action.size);
+                return this.getInitialState(action.size);
             }
             default: {
                 return state;

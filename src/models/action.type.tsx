@@ -1,1 +1,1 @@
-export type ActionType = 'CELL_CLICK' | 'GET_FIELD' | 'START_LOAD';
+export type ActionType = 'CELL_CLICK' | 'RESTART_GAME' | 'RESIZE_FIELD';

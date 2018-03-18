@@ -35,6 +35,12 @@ export class AppComponent extends React.Component<AppContainerProps, {gameField:
     public onCellClick(cell: GameCell) {
         GameFieldActions.onCellClick(cell);
     }
+    public onRestartClick() {
+        GameFieldActions.onRestartGame();
+    }
+    public onSizeChange(size: number) {
+        GameFieldActions.onSizeChange(size);
+    }
 
     render() {
         const { gameField } = this.state;
@@ -47,6 +53,11 @@ export class AppComponent extends React.Component<AppContainerProps, {gameField:
                 )
             }
             </div>
+            <button onClick={this.onRestartClick.bind(this)}>Restart</button>
+            <button onClick={this.onSizeChange.bind(this, [10])}>Size 10</button>
+            <button onClick={this.onSizeChange.bind(this, [15])}>Size 15</button>
+            <button onClick={this.onSizeChange.bind(this, [20])}>Size 20</button>
+            <button onClick={this.onSizeChange.bind(this, [25])}>Size 25</button>
         </div>
     }
 }
