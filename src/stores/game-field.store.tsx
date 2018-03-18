@@ -12,6 +12,8 @@ export type GameFieldState = Immutable.Map<number, Immutable.Map<number, GameCel
 
 class GameFieldStore extends ReduceStore<GameFieldState, Action> {
     public gameField: GameFieldState;
+    private ticToe: 1 | 2 = 1;
+    private turn = 1;
 
     constructor(dispatcher: Flux.Dispatcher<Action>) {
         super(dispatcher);
@@ -21,7 +23,7 @@ class GameFieldStore extends ReduceStore<GameFieldState, Action> {
         let map: GameFieldState = Immutable.Map();
         for (let i = 0; i < INITIAL_GAME_FIELD_SIZE; i++) {
             for (let j = 0; j < INITIAL_GAME_FIELD_SIZE; j++) {
-                map = map.setIn([i, j], new GameCell(i, j, 0));
+                map = map.setIn([i, j], new GameCell(i, j, 0, null));
             }
         }
         return map;
@@ -33,10 +35,10 @@ class GameFieldStore extends ReduceStore<GameFieldState, Action> {
 
         switch(action.type) {
             case 'CELL_CLICK': {
-                const newValue = action.cell.value === 1 ? 2 : 1;
                 const newState = state.setIn(
-                    [action.cell.x, action.cell.y], new GameCell(action.cell.x, action.cell.y, newValue)
+                    [action.cell.x, action.cell.y], new GameCell(action.cell.x, action.cell.y, this.ticToe, this.turn++)
                 );
+                this.ticToe = this.ticToe === 1 ? 2 : 1;
                 return newState;
             }
             default: {

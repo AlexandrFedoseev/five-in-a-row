@@ -14,6 +14,9 @@ export class GameFieldCell extends React.Component<GameFieldCellProps, {}> {
     }
 
     public onCellClick() {
+        if (this.props.cellData.value !== 0) {
+            return;
+        }
         this.props.onCellClick(this.props.cellData);
     }
 
@@ -30,7 +33,7 @@ export class GameFieldCell extends React.Component<GameFieldCellProps, {}> {
 
     render() {
         return <div className={'cell ' + this.cellTypeClass(this.props.cellData.value) } onClick={this.onCellClick.bind(this)}>
-            <div className='turn-number'>{this.props.cellData.value}</div>
+            <div className='turn-number'>{this.props.cellData.turn || ''}</div>
         </div>
     }
 }

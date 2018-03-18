@@ -25,13 +25,11 @@ export class GameFieldRow extends React.Component<GameFieldRowProps, {}> {
 
     render() {
         return <div className='row'>
-            <div className='row-wrap'>
             {
                 this.props.rowData.valueSeq().map((cell, i) => 
                     <GameFieldCell cellData={cell} key={i} onCellClick={this.onCellClick.bind(this)} />
                 )
             }
-            </div>
         </div>
     }
 }
