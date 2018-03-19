@@ -8,8 +8,12 @@
     & .cell {
         border-bottom: 1px solid #888;
     }
-    &:first-child .cell {
-        border-top: 1px solid #888;
+
+    &:first-child {
+        min-height: 42px;
+        & .cell {
+            border-top: 1px solid #888;
+        }
     }
     &::after {
         content: '';

@@ -7,6 +7,7 @@
     background-color: #686868;
 }
 .game-field-scroll-port {
+    padding: 16px;
     flex: 1;
     max-height: 100vh;
     overflow: auto;
@@ -16,7 +17,5 @@
 .game-field {
     display: flex;
     height: 100%;
-    align-items: center;
-    justify-content: center;
     flex-direction: column;
 }
