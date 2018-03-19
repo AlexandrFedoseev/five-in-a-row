@@ -140,8 +140,8 @@ export class AI {
     };
 
     private isCellOnField(cellCoords: Coords, size: number): boolean {
-        return cellCoords.row > 0
-        && cellCoords.col > 0
+        return cellCoords.row >= 0
+        && cellCoords.col >= 0
         && cellCoords.row < size
         && cellCoords.col < size
     }

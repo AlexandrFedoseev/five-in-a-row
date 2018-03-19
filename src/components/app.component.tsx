@@ -1,23 +1,26 @@
 import * as React from 'react';
 import * as Immutable from 'Immutable';
-import GameFieldStore, { GameFieldState } from '../stores/game-field.store';
+import GameFieldStore, { GameState } from '../stores/game-field.store';
 import * as GameFieldActions from '../actions/game-field.actions';
 import { GameCell } from '../models/game-cell.model';
 import { GameFieldRow } from '../containers/game-field-row';
+import { ControlPannel } from '../containers/contol-pannel';
 
 import './app.component.scss';
 import { INITIAL_GAME_FIELD_SIZE } from '../five-in-a-row.cfg';
+import { GameResultModal } from '../containers/game-result-modal';
+
 
 export interface AppContainerProps { compiler: string; framework: string; }
 
-export class AppComponent extends React.Component<AppContainerProps, {gameField: GameFieldState}> {
+export class AppComponent extends React.Component<AppContainerProps, {gameSate: GameState}> {
     private listenerSubscription: { remove: Function };
     public arr: Immutable.Map<number, GameCell>[] = [];
     public vievEls: Element[];
     constructor(props: AppContainerProps) {
         super(props);
         this.state = {
-            gameField: GameFieldStore.getState()
+            gameSate: GameFieldStore.getState(),
         }
     }
     public componentDidMount() {
@@ -28,42 +31,36 @@ export class AppComponent extends React.Component<AppContainerProps, {gameField:
     }
     public handleStateChange() {
         const state = {
-            gameField: GameFieldStore.getState()
+            gameSate: GameFieldStore.getState(),
         }
         this.setState(state);
     }
     public onCellClick(cell: GameCell) {
         GameFieldActions.onCellClick(cell);
     }
-    public onRestartClick() {
-        GameFieldActions.onRestartGame();
+    public drawModal() {
+        if (this.state.gameSate.game.isGameEnded) {
+            return <GameResultModal isWinnerModal={this.state.gameSate.game.isPlayerWins} />
+        }
+        return '';
     }
-    public onSizeChange(size: number) {
-        GameFieldActions.onSizeChange(size);
-    }
-    public onSideChange(size: number) {
-        GameFieldActions.onSideChange();
-    }
+    
     render() {
-        const { gameField } = this.state;
+        const { gameField } = this.state.gameSate;
+        
 
         return <div className="game-view-port">
-            <div className='gameField'>
-            {
-                gameField.valueSeq().map((row, i) =>
-                    <GameFieldRow rowData={row} key={i.toString()} onCellClick={this.onCellClick.bind(this)} />
-                )
-            }
+            <ControlPannel />
+            <div className='game-field-scroll-port'>
+                <div className='game-field'>
+                    {
+                        gameField.valueSeq().map((row, i) =>
+                            <GameFieldRow rowData={row} key={i.toString()} onCellClick={this.onCellClick.bind(this)} />
+                        )
+                    }
+                </div>
+                { this.drawModal() }
             </div>
-            <h1>Not so smart Gomoku</h1>
-            <button onClick={this.onRestartClick.bind(this)}>Restart</button>
-            <h2>Field size</h2>
-            <button onClick={this.onSizeChange.bind(this, [10])}>10</button>
-            <button onClick={this.onSizeChange.bind(this, [15])}>15</button>
-            <button onClick={this.onSizeChange.bind(this, [20])}>20</button>
-            <button onClick={this.onSizeChange.bind(this, [25])}>25</button>
-            <h2>-</h2>
-            <button onClick={this.onSideChange.bind(this)}>Change side</button>
         </div>
     }
 }

@@ -1,14 +1,22 @@
 .game-view-port {
-    display: block;
-    width: 100%;
-    height: 100%;
+    display: flex;
+    min-height: 100vh;
+    margin: 0 auto;
     overflow: auto;
     border-radius: 4px;
-    position: absolute;
-    left: 0;
-    top: 0;
+    background-color: #686868;
 }
-.gameField {
+.game-field-scroll-port {
+    flex: 1;
+    max-height: 100vh;
+    overflow: auto;
+    border-right: 1px solid #232323;
+    position: relative;
+}
+.game-field {
     display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
     flex-direction: column;
 }
