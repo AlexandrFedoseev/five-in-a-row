@@ -1,0 +1,20 @@
+.row {
+    white-space: nowrap;
+    font-size: 0;
+    width: auto;
+    display: flex;
+    margin: 0 auto;
+    & .cell {
+        border-bottom: 1px solid #888;
+    }
+    &:first-child .cell {
+        border-top: 1px solid #888;
+    }
+    &::after {
+        content: '';
+        display: table;
+        clear: both;
+    }
+}
+
+

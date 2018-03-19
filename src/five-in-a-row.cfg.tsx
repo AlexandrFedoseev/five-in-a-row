@@ -1,0 +1,1 @@
+export const INITIAL_GAME_FIELD_SIZE = 15;

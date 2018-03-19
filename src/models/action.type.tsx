@@ -1,0 +1,2 @@
+export type ActionType = 'CELL_CLICK' | 'RESTART_GAME' | 'RESIZE_FIELD' | 'CHANGE_SIDE'
+| 'RESET_MODAL' | 'PLAYER_WINS' | 'AI_WINS';
