@@ -1,9 +1,9 @@
 .game-result-modal {
-    position: absolute;
-    width: 100%;
+    position: fixed;
+    width: calc(100% - 200px);
     height: 100%;
     top: 0;
-    left: 0;
+    left: 200px;
     background-color: rgba(0,0,0,0.3);
     display: flex;
     height: 100%;
