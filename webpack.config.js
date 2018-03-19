@@ -58,11 +58,6 @@ module.exports = {
         ]
     },
 
-    externals: {
-        "react": "React",
-        "react-dom": "ReactDOM"
-    },
-
     plugins: [
         new HtmlWebPackPlugin({
             template: "./src/index.html",
