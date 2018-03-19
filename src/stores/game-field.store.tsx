@@ -21,7 +21,7 @@ class GameFieldStore extends ReduceStore<GameFieldState, Action> {
 
     constructor(dispatcher: Flux.Dispatcher<Action>) {
         super(dispatcher);
-        this._ai = new AI();
+        this._ai = new AI(this.fieldSize, this.opposite(this.userPlays));
     }
 
     public getInitialState(size?: number): GameFieldState {
@@ -59,19 +59,36 @@ class GameFieldStore extends ReduceStore<GameFieldState, Action> {
                 return newState;
             }
             case 'RESTART_GAME': {
-                this._ai.init(this.fieldSize);
+                this._ai.init(this.fieldSize, this.opposite(this.userPlays));
                 return this.getInitialState(this.fieldSize);
             }
             case 'RESIZE_FIELD': {
                 this.fieldSize = action.size;
-                this._ai.init(action.size);
+                this._ai.init(action.size, this.opposite(this.userPlays));
                 return this.getInitialState(action.size);
+            }
+            case 'CHANGE_SIDE': {
+                this.userPlays = this.opposite(this.userPlays);
+                this._ai.init(this.fieldSize, this.opposite(this.userPlays));
+                let newState = this.getInitialState(this.fieldSize);
+                if (this.userPlays === 1) {
+                    return newState
+                } 
+                const aiTurn = this._ai.takeTurn(null, null, this.userPlays);
+                newState = newState.setIn(
+                    [aiTurn.row, aiTurn.col], new GameCell(aiTurn.row, aiTurn.col, aiTurn.val, this.turn++)
+                );
+                return newState;
             }
             default: {
                 return state;
             }
         }
         
+    }
+
+    private opposite(side: 1 | 2): 1 | 2 {
+        return side === 1 ? 2 : 1;
     }
 
 }

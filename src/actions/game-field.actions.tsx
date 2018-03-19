@@ -16,4 +16,6 @@ export function onSizeChange(size: number): void {
     dispatcher.dispatch(new ResizeAction('RESIZE_FIELD', size))
 }
 
-
+export function onSideChange(): void {
+    dispatcher.dispatch(new SimpleAction('CHANGE_SIDE'))
+}

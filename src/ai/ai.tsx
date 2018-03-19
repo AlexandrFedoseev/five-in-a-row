@@ -8,15 +8,19 @@ type PotentialMoves = Map<number, Map<number, Weight>>;
 
 export class AI {
     private potentialMoves: PotentialMoves;
-    private size = 15;
+    private size: number;
+    private aiSide: 1 | 2;
+    private userSide: 1 | 2;
     private matrix: Array<Array<0 | 1 | 2>>;
 
-    constructor() {
-        this.init(15);
+    constructor(size: number, aiSide: 1 | 2) {
+        this.init(size, aiSide);
     }
 
-    public init(size: number) {
+    public init(size: number, aiSide: 1 | 2) {
         this.size = size;
+        this.aiSide = aiSide;
+        this.userSide = aiSide === 1 ? 2 : 1;
         this.potentialMoves = Map<number, Map<number, Weight>>();
         this.matrix = this.makeNewGameMatrix(size);
         this.potentialMoves = this.setFirstPotentialMove(size);
@@ -35,26 +39,27 @@ export class AI {
 
     private setFirstPotentialMove(size: number): PotentialMoves {
         const fieldCenter = Math.floor(size / 2);
-        return this.potentialMoves.setIn([fieldCenter, fieldCenter], new Weight(0, 0));
+        this.potentialMoves = this.potentialMoves.setIn([fieldCenter, fieldCenter], new Weight(0, 0));
+        return this.potentialMoves;
     }
 
 
     public takeTurn(n: number, m: number, xo: 1 | 2) {
-        let aiPlays: 1 | 2 = xo === 1 ? 2 : 1;
-        this.saveMove(n, m, xo)
-        this.updatePotentialMove(n, m);
-        this.calculatePotentialMovePattern(aiPlays === 1);
+        if (n != null && m != null) {
+            this.saveMove(n, m, xo)
+            this.updatePotentialMove(n, m);
+            this.calculatePotentialMovePattern(this.aiSide === 1);
+        }
+
         const goodMoves: Coords[] = this.getGoodMoves();
         const move: Coords = this.getRandomGoodMove(goodMoves);
-
-        // ai turn save
-        this.saveMove(move.row, move.col, aiPlays);
+        this.saveMove(move.row, move.col, this.aiSide);
         this.updatePotentialMove(move.row, move.col);
         this.calculatePotentialMovePattern(xo === 1);
         return ({
             row: move.row,
             col: move.col,
-            val: aiPlays
+            val: this.aiSide
         });
     }
 

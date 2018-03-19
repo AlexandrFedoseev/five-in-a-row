@@ -23,7 +23,6 @@ class Pattern {
 
     constructor() {
         this.init();
-        console.log('init patterns', this.pattern);
     }
 
     private init() {
