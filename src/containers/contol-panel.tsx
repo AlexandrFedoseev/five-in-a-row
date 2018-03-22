@@ -1,9 +1,9 @@
 import * as React from 'react';
 import * as GameFieldActions from '../actions/game-field.actions';
-import './control-pannel.scss';
+import './control-panel.scss';
 
 
-export class ControlPannel extends React.Component<null, {}> {
+export class ControlPanel extends React.Component<null, {}> {
     constructor(props: null) {
         super(props);
     }
@@ -19,8 +19,7 @@ export class ControlPannel extends React.Component<null, {}> {
     }
 
     render() {
-        return <div className='control-pannel'>
-        <h1>Not so smart Gomoku</h1>
+        return <div className='control-panel'>
             <button onClick={this.onRestartClick.bind(this)}>Restart</button>
             <h2>Field size</h2>
             <button onClick={this.onSizeChange.bind(this, [10])}>10</button>

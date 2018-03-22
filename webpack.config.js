@@ -2,7 +2,7 @@ const HtmlWebPackPlugin = require("html-webpack-plugin");
 module.exports = {
     entry: "./src/index.tsx",
     output: {
-        filename: "bundle_v3.js",
+        filename: "bundle.js",
         path: __dirname + "/dist"
     },
 
@@ -14,8 +14,11 @@ module.exports = {
 
     module: {
         rules: [
-            { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
-
+            {
+                test: /\.tsx?$/,
+                loader: "ts-loader" // "awesome-typescript-loader"
+                // https://github.com/s-panferov/awesome-typescript-loader/issues/541
+            },
             { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
 
             {

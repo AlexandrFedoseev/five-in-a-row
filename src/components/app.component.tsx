@@ -4,7 +4,7 @@ import GameFieldStore, { GameState } from '../stores/game-field.store';
 import * as GameFieldActions from '../actions/game-field.actions';
 import { GameCell } from '../models/game-cell.model';
 import { GameFieldRow } from '../containers/game-field-row';
-import { ControlPannel } from '../containers/contol-pannel';
+import { ControlPanel } from '../containers/contol-panel';
 
 import './app.component.scss';
 import { INITIAL_GAME_FIELD_SIZE } from '../five-in-a-row.cfg';
@@ -50,7 +50,6 @@ export class AppComponent extends React.Component<AppContainerProps, {gameSate: 
         
 
         return <div className="game-view-port">
-            <ControlPannel />
             <div className='game-field-scroll-port'>
                 <div className='game-field'>
                     {
@@ -61,6 +60,7 @@ export class AppComponent extends React.Component<AppContainerProps, {gameSate: 
                 </div>
                 { this.drawModal() }
             </div>
+            <ControlPanel />
         </div>
     }
 }
