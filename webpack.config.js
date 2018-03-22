@@ -14,8 +14,11 @@ module.exports = {
 
     module: {
         rules: [
-            { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
-
+            {
+                test: /\.tsx?$/,
+                loader: "ts-loader" // "awesome-typescript-loader"
+                // https://github.com/s-panferov/awesome-typescript-loader/issues/541
+            },
             { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
 
             {
