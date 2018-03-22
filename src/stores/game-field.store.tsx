@@ -8,9 +8,9 @@ import { GameCell } from '../models/game-cell.model';
 import { INITIAL_GAME_FIELD_SIZE } from '../five-in-a-row.cfg';
 import { Action } from '../models/action.model';
 
-export type GameFilldState = Immutable.Map<number, Immutable.Map<number, GameCell>>
+export type GameFieldState = Immutable.Map<number, Immutable.Map<number, GameCell>>
 export type GameState = {
-    gameField: GameFilldState
+    gameField: GameFieldState
     game: {
         isGameEnded: boolean,
         isPlayerWins: boolean
@@ -32,7 +32,7 @@ class GameFieldStore extends ReduceStore<GameState, Action> {
 
     public getInitialState(size?: number): GameState {
         size = size == null ? INITIAL_GAME_FIELD_SIZE : size;
-        let map: GameFilldState = Immutable.Map();
+        let map: GameFieldState = Immutable.Map();
         for (let i = 0; i < size; i++) {
             for (let j = 0; j < size; j++) {
                 map = map.setIn([i, j], new GameCell(i, j, 0, null));
@@ -82,29 +82,15 @@ class GameFieldStore extends ReduceStore<GameState, Action> {
                 };
             }
             case 'RESTART_GAME': {
-                this.turn = 1;
-                this._ai.init(this.fieldSize, this.opposite(this.userPlays));
-                return this.getInitialState(this.fieldSize);
+                return this.makeNewGameState();
             }
             case 'RESIZE_FIELD': {
-                this.turn = 1;
                 this.fieldSize = action.size;
-                this._ai.init(action.size, this.opposite(this.userPlays));
-                return this.getInitialState(action.size);
+                return this.makeNewGameState();
             }
             case 'CHANGE_SIDE': {
-                this.turn = 1;
                 this.userPlays = this.opposite(this.userPlays);
-                this._ai.init(this.fieldSize, this.opposite(this.userPlays));
-                let newState = this.getInitialState(this.fieldSize);
-                if (this.userPlays === 1) {
-                    return newState
-                } 
-                const aiTurn = this._ai.takeTurn(null, null, this.userPlays);
-                newState.gameField = newState.gameField.setIn(
-                    [aiTurn.row, aiTurn.col], new GameCell(aiTurn.row, aiTurn.col, aiTurn.val, this.turn++)
-                );
-                return newState;
+                return this.makeNewGameState();
             }
             default: {
                 return state;
@@ -113,6 +99,23 @@ class GameFieldStore extends ReduceStore<GameState, Action> {
         
     }
 
+    private makeNewGameState(): GameState {
+        this.turn = 1;
+        this._ai.init(this.fieldSize, this.opposite(this.userPlays));
+        let newState = this.getInitialState(this.fieldSize);
+        if (this.userPlays === 2) {
+            newState = this.takeFirstAiTurn(newState);
+        }
+        return newState;
+    }
+
+    private takeFirstAiTurn(state: GameState): GameState {
+        const aiTurn = this._ai.takeTurn(null, null, this.userPlays);
+        state.gameField = state.gameField.setIn(
+            [aiTurn.row, aiTurn.col], new GameCell(aiTurn.row, aiTurn.col, aiTurn.val, this.turn++)
+        );
+        return state;
+    }
     private opposite(side: 1 | 2): 1 | 2 {
         return side === 1 ? 2 : 1;
     }
